@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="section">
+
+    <h1>자율탐구 보고서</h1>
+
+    {% if reports %}
+
+    <table class="info-table">
+
+        <tr>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>업로드 날짜</th>
+        </tr>
+
+        {% for report in reports %}
+
+        <tr>
+            <td>{{ report.title }}</td>
+            <td>{{ report.author }}</td>
+            <td>{{ report.date }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <div class="empty-box">
+        현재 등록된 보고서가 없습니다.
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="section">
+
+<h1>로그인</h1>
+
+<form method="post">
+
+<input
+type="text"
+name="username"
+placeholder="아이디"
+required
+>
+
+<br><br>
+
+<input
+type="password"
+name="password"
+placeholder="비밀번호"
+required
+>
+
+<br><br>
+
+<button class="btn join" type="submit">
+로그인
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

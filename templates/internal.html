@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="section">
+
+<div class="tabs">
+
+<a href="/contest/internal" class="tab active">
+교내 대회
+</a>
+
+<a href="/contest/external" class="tab">
+교외 대회
+</a>
+
+</div>
+
+<h1>대회 목록</h1>
+
+{% if session.get("role") == "admin" %}
+
+<div class="card">
+
+<h2>교내 대회 등록</h2>
+
+<form method="post">
+
+<input
+type="text"
+name="name"
+placeholder="대회명"
+required
+>
+
+<br><br>
+
+<input
+type="text"
+name="date"
+placeholder="대회 일시"
+required
+>
+
+<br><br>
+
+<input
+type="text"
+name="deadline"
+placeholder="마감 기한"
+required
+>
+
+<br><br>
+
+<button class="btn join" type="submit">
+대회 등록
+</button>
+
+</form>
+
+</div>
+
+{% endif %}
+
+{% for c in contests %}
+
+<div class="card">
+
+<h2>
+
+{{ c[1] }}
+
+</h2>
+
+<div class="date">
+
+📅 {{ c[2] }}
+
+<br>
+
+⏰ 마감 {{ c[3] }}
+
+</div>
+
+<div class="buttons">
+
+<button class="btn join">
+참가 희망
+</button>
+
+<button class="btn notyet">
+미정
+</button>
+
+<button class="btn no">
+불참
+</button>
+
+<a href="/join/{{ c[0] }}">
+
+<button class="team">
+
+팀 구성 현황
+
+</button>
+
+</a>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

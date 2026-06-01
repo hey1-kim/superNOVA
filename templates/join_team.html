@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="section">
+
+<h1>팀 구성</h1>
+
+<form method="post">
+
+<input
+type="text"
+name="team"
+placeholder="팀명"
+required
+>
+
+<br><br>
+
+<h3>팀원 선택</h3>
+
+{% for u in users %}
+
+<input
+type="checkbox"
+name="members"
+value="{{u[0]}}"
+>
+
+{{u[1]}}
+
+<br><br>
+
+{% endfor %}
+
+<button class="btn join" type="submit">
+팀 등록
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

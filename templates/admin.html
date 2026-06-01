@@ -1,0 +1,349 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="admin-container">
+
+    <!-- =========================
+         헤더
+    ========================= -->
+
+    <div class="admin-header">
+
+        <h1>
+            관리자 대시보드
+        </h1>
+
+        <p>
+            superNOVA 관리 시스템
+        </p>
+
+    </div>
+
+    <!-- =========================
+         등록 카드 영역
+    ========================= -->
+
+    <div class="admin-grid">
+
+        <!-- 교내 대회 -->
+
+        <div class="admin-card">
+
+            <h2>
+                교내 대회 등록
+            </h2>
+
+            <form
+                method="POST"
+                action="/create_internal_contest"
+            >
+
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="대회명"
+                    required
+                >
+
+                <textarea
+                    name="description"
+                    placeholder="대회 설명"
+                    required
+                ></textarea>
+
+                <input
+                    type="date"
+                    name="date"
+                    required
+                >
+
+                <button class="admin-btn">
+                    등록하기
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- 교외 대회 -->
+
+        <div class="admin-card">
+
+            <h2>
+                교외 대회 등록
+            </h2>
+
+            <form
+                method="POST"
+                action="/create_external_contest"
+            >
+
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="대회명"
+                    required
+                >
+
+                <textarea
+                    name="description"
+                    placeholder="대회 설명"
+                    required
+                ></textarea>
+
+                <input
+                    type="date"
+                    name="date"
+                    required
+                >
+
+                <button class="admin-btn">
+                    등록하기
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- 장학금 -->
+
+        <div class="admin-card">
+
+            <h2>
+                장학금 등록
+            </h2>
+
+            <form
+                method="POST"
+                action="/create_scholarship"
+            >
+
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="장학금명"
+                    required
+                >
+
+                <input
+                    type="text"
+                    name="target"
+                    placeholder="지원 대상"
+                    required
+                >
+
+                <input
+                    type="date"
+                    name="deadline"
+                    required
+                >
+
+                <button class="admin-btn">
+                    등록하기
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+         계획서 관리
+    ========================= -->
+
+    <div class="admin-table-card">
+
+        <div class="table-header">
+            업로드된 계획서
+        </div>
+
+        {% if proposals %}
+
+        <table class="admin-table">
+
+            <tr>
+
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>파일</th>
+
+            </tr>
+
+            {% for proposal in proposals %}
+
+            <tr>
+
+                <td>{{ proposal.id }}</td>
+
+                <td>{{ proposal.title }}</td>
+
+                <td>{{ proposal.author }}</td>
+
+                <td>
+
+                    <a
+                        href="/download/proposal/{{ proposal.filename }}"
+                        class="download-btn"
+                    >
+                        다운로드
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        {% else %}
+
+        <div class="empty-box">
+
+            현재 업로드된 계획서가 없습니다.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <!-- =========================
+         보고서 관리
+    ========================= -->
+
+    <div class="admin-table-card">
+
+        <div class="table-header">
+            업로드된 보고서
+        </div>
+
+        {% if reports %}
+
+        <table class="admin-table">
+
+            <tr>
+
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>파일</th>
+
+            </tr>
+
+            {% for report in reports %}
+
+            <tr>
+
+                <td>{{ report.id }}</td>
+
+                <td>{{ report.title }}</td>
+
+                <td>{{ report.author }}</td>
+
+                <td>
+
+                    <a
+                        href="/download/report/{{ report.filename }}"
+                        class="download-btn"
+                    >
+                        다운로드
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        {% else %}
+
+        <div class="empty-box">
+
+            현재 업로드된 보고서가 없습니다.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <!-- =========================
+         회원 관리
+    ========================= -->
+
+    <div class="admin-table-card">
+
+        <div class="table-header">
+            회원 관리
+        </div>
+
+        {% if users %}
+
+        <table class="admin-table">
+
+            <tr>
+
+                <th>번호</th>
+                <th>아이디</th>
+                <th>권한</th>
+                <th>관리</th>
+
+            </tr>
+
+            {% for user in users %}
+
+            <tr>
+
+                <td>{{ user.id }}</td>
+
+                <td>{{ user.username }}</td>
+
+                <td>{{ user.role }}</td>
+
+                <td>
+
+                    {% if user.role != "admin" %}
+
+                    <a
+                        href="/delete_user/{{ user.id }}"
+                        class="delete-btn"
+                        onclick="return confirm('정말 삭제하시겠습니까?');"
+                    >
+                        삭제
+                    </a>
+
+                    {% else %}
+
+                    관리자 보호
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        {% else %}
+
+        <div class="empty-box">
+
+            등록된 회원이 없습니다.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

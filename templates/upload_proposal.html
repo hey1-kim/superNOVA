@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="form-page">
+
+    <div class="form-container">
+
+        <h1>
+            계획서 업로드
+        </h1>
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <!-- 연구 활동명 -->
+
+            <label>
+                연구 활동명
+            </label>
+
+            <input
+                type="text"
+                name="title"
+                placeholder="예: 화성 ISRU 기반 메탄 연료 연구"
+                required
+            >
+
+            <!-- 팀원 -->
+
+            <label>
+                팀원
+            </label>
+
+            <input
+                type="text"
+                name="members"
+                placeholder="예: 김혜원"
+                required
+            >
+
+            <!-- 분야 -->
+
+            <label>
+                분야
+            </label>
+
+            <input
+                type="text"
+                name="field"
+                placeholder="예: 항공우주공학"
+                required
+            >
+
+            <!-- 용도 -->
+
+            <label>
+                용도
+            </label>
+
+            <select name="purpose" required>
+
+                <option value="">
+                    선택
+                </option>
+
+                <option value="자율 탐구">
+                    교내 탐구
+                </option>
+
+                <option value="대회 제출">
+                    대회 제출
+                </option>
+
+                <option value="논문 준비">
+                    논문 준비
+                </option>
+
+                <option value="기타">
+                    기타
+                </option>
+
+            </select>
+
+            <!-- 파일 업로드 -->
+
+            <label>
+                계획서 파일 업로드
+            </label>
+
+            <input
+                type="file"
+                name="file"
+                required
+            >
+
+            <!-- 버튼 -->
+
+            <button
+                type="submit"
+                class="submit-btn"
+            >
+                계획서 업로드
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

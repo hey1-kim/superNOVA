@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="section">
+
+<div class="tabs">
+
+<a href="/contest/internal" class="tab">
+교내 대회
+</a>
+
+<a href="/contest/external" class="tab active">
+교외 대회
+</a>
+
+</div>
+
+<h1>교외 대회</h1>
+
+{% for c in contests %}
+
+<div class="card">
+
+<h2>{{ c[1] }}</h2>
+
+<div class="date">
+
+📅 {{ c[2] }}
+
+<br>
+
+⏰ 마감 {{ c[3] }}
+
+<br><br>
+
+🏢 {{ c[4] }}
+
+<br>
+
+🔗 {{ c[5] }}
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

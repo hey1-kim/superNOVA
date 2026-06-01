@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="section">
+
+    <h1>자율탐구 계획서</h1>
+
+    {% if proposals %}
+
+    <table class="info-table">
+
+        <tr>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>업로드 날짜</th>
+        </tr>
+
+        {% for proposal in proposals %}
+
+        <tr>
+            <td>{{ proposal.title }}</td>
+            <td>{{ proposal.author }}</td>
+            <td>{{ proposal.date }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <div class="empty-box">
+        현재 등록된 계획서가 없습니다.
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="section">
+
+    <h1>교외 대회</h1>
+
+    {% if contests %}
+
+        {% for contest in contests %}
+
+        <div class="card">
+
+            <h2>{{ contest.title }}</h2>
+
+            <p>{{ contest.description }}</p>
+
+            <div class="date">
+                개최일 : {{ contest.date }}
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty-box">
+            현재 등록된 교외 대회가 없습니다.
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

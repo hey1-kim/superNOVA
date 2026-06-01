@@ -1,0 +1,167 @@
+<!-- templates/base.html -->
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>superNOVA</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<!-- =========================
+     네비게이션 바
+========================= -->
+
+<nav>
+
+    <!-- 로고 -->
+
+    <a href="/" class="brand">
+        superNOVA
+    </a>
+
+    <!-- 메뉴 -->
+
+    <div class="right">
+
+        <!-- 홈 -->
+
+        <a href="/">
+            홈
+        </a>
+
+        <!-- =========================
+             대회 드롭다운
+        ========================= -->
+
+        <div class="dropdown">
+
+            <button class="dropbtn">
+                대회
+            </button>
+
+            <div class="dropdown-content">
+
+                <div class="dropdown-inner">
+
+                    <a href="/contest/internal">
+                        교내대회
+                    </a>
+
+                    <a href="/contest/external">
+                        교외대회
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- =========================
+             장학금
+        ========================= -->
+
+        <a href="/scholarship">
+            장학금
+        </a>
+
+        <!-- =========================
+             자율탐구 드롭다운
+        ========================= -->
+
+        <div class="dropdown">
+
+            <button class="dropbtn">
+                자율탐구
+            </button>
+
+            <div class="dropdown-content">
+
+                <div class="dropdown-inner">
+
+                    <a href="/proposal">
+                        계획서
+                    </a>
+
+                    <a href="/report">
+                        보고서
+                    </a>
+
+                    <a href="/upload_proposal">
+                        계획서 업로드
+                    </a>
+
+                    <a href="/upload_report">
+                        보고서 업로드
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- =========================
+             관리자
+        ========================= -->
+
+        {% if session.get("role") == "admin" %}
+
+            <a href="/admin">
+                관리자
+            </a>
+
+        {% endif %}
+
+        <!-- =========================
+             로그인 상태
+        ========================= -->
+
+        {% if session.get("user_id") %}
+
+            <a href="/logout">
+                로그아웃
+            </a>
+
+        {% else %}
+
+            <a href="/login" class="login">
+                로그인
+            </a>
+
+            <a href="/register" class="signup">
+                회원가입
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+<!-- =========================
+     본문
+========================= -->
+
+{% block content %}
+{% endblock %}
+
+</body>
+
+</html>

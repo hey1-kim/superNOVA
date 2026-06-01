@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="section">
+
+<h1>대시보드</h1>
+
+<div class="card">
+
+<h2>회원 수</h2>
+
+<p>{{user_count}}</p>
+
+</div>
+
+<div class="card">
+
+<h2>등록된 대회</h2>
+
+<p>{{contest_count}}</p>
+
+</div>
+
+<div class="card">
+
+<h2>계획서 수</h2>
+
+<p>{{proposal_count}}</p>
+
+</div>
+
+<div class="card">
+
+<h2>보고서 수</h2>
+
+<p>{{report_count}}</p>
+
+</div>
+
+</div>
+
+{% endblock %}

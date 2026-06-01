@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="form-page">
+
+    <div class="form-container">
+
+        <h1>
+            보고서 업로드
+        </h1>
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <!-- 연구 활동명 -->
+
+            <label>
+                연구 활동명
+            </label>
+
+            <input
+                type="text"
+                name="title"
+                placeholder="예: 사바티에 반응 기반 추진체 생산"
+                required
+            >
+
+            <!-- 팀원 -->
+
+            <label>
+                팀원
+            </label>
+
+            <input
+                type="text"
+                name="members"
+                placeholder="예: 김혜원, 홍길동"
+                required
+            >
+
+            <!-- 분야 -->
+
+            <label>
+                분야
+            </label>
+
+            <input
+                type="text"
+                name="field"
+                placeholder="예: 화학공학"
+                required
+            >
+
+            <!-- 용도 -->
+
+            <label>
+                용도
+            </label>
+
+            <select name="purpose" required>
+
+                <option value="">
+                    선택
+                </option>
+
+                <option value="최종 보고서">
+                    최종 보고서
+                </option>
+
+                <option value="중간 보고서">
+                    중간 보고서
+                </option>
+
+                <option value="대회 제출">
+                    대회 제출
+                </option>
+
+                <option value="기타">
+                    기타
+                </option>
+
+            </select>
+
+            <!-- 파일 업로드 -->
+
+            <label>
+                보고서 파일 업로드
+            </label>
+
+            <input
+                type="file"
+                name="file"
+                required
+            >
+
+            <!-- 버튼 -->
+
+            <button
+                type="submit"
+                class="submit-btn"
+            >
+                보고서 업로드
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

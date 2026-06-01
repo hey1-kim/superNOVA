@@ -1079,4 +1079,12 @@ display:inline-block;
 
 opacity:0.9;
 
+}.info-table a{
+    color:#dc2626;
+    font-weight:600;
+    text-decoration:none;
+}
+
+.info-table a:hover{
+    text-decoration:underline;
 }

@@ -156,52 +156,58 @@ def logout():
 @app.route("/admin")
 def admin():
 
-    # 관리자만 접근 가능
-
     if session.get("role") != "admin":
-
         return redirect("/")
 
     conn = get_db()
     c = conn.cursor()
 
-    # 계획서
+    c.execute("""
+        SELECT * FROM users
+        ORDER BY id DESC
+    """)
+    users = c.fetchall()
 
     c.execute("""
         SELECT * FROM proposals
         ORDER BY id DESC
     """)
-
     proposals = c.fetchall()
-
-    # 보고서
 
     c.execute("""
         SELECT * FROM reports
         ORDER BY id DESC
     """)
-
     reports = c.fetchall()
 
-    # 회원 목록
-
     c.execute("""
-        SELECT * FROM users
+        SELECT * FROM internal_contest
         ORDER BY id DESC
     """)
+    internal_contests = c.fetchall()
 
-    users = c.fetchall()
+    c.execute("""
+        SELECT * FROM external_contest
+        ORDER BY id DESC
+    """)
+    external_contests = c.fetchall()
+
+    c.execute("""
+        SELECT * FROM scholarships
+        ORDER BY id DESC
+    """)
+    scholarships = c.fetchall()
 
     conn.close()
 
     return render_template(
-
         "admin.html",
-
+        users=users,
         proposals=proposals,
         reports=reports,
-        users=users
-
+        internal_contests=internal_contests,
+        external_contests=external_contests,
+        scholarships=scholarships
     )
 
 # =========================
@@ -640,7 +646,76 @@ def download_report(filename):
         as_attachment=True
 
     )
+# =========================
+# 교내대회 삭제
+# =========================
 
+@app.route("/delete_internal_contest/<int:contest_id>")
+def delete_internal_contest(contest_id):
+
+    if session.get("role") != "admin":
+        return redirect("/")
+
+    conn = get_db()
+    c = conn.cursor()
+
+    c.execute("""
+        DELETE FROM internal_contest
+        WHERE id=?
+    """, (contest_id,))
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/admin")
+
+
+# =========================
+# 교외대회 삭제
+# =========================
+
+@app.route("/delete_external_contest/<int:contest_id>")
+def delete_external_contest(contest_id):
+
+    if session.get("role") != "admin":
+        return redirect("/")
+
+    conn = get_db()
+    c = conn.cursor()
+
+    c.execute("""
+        DELETE FROM external_contest
+        WHERE id=?
+    """, (contest_id,))
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/admin")
+
+
+# =========================
+# 장학금 삭제
+# =========================
+
+@app.route("/delete_scholarship/<int:scholarship_id>")
+def delete_scholarship(scholarship_id):
+
+    if session.get("role") != "admin":
+        return redirect("/")
+
+    conn = get_db()
+    c = conn.cursor()
+
+    c.execute("""
+        DELETE FROM scholarships
+        WHERE id=?
+    """, (scholarship_id,))
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/admin")
 # =========================
 # 실행
 # =========================

@@ -1088,3 +1088,35 @@ opacity:0.9;
 .info-table a:hover{
     text-decoration:underline;
 }
+/* 관리자 테이블 */
+
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.info-table th {
+    color: #111827;
+    background: #f3f4f6;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+}
+
+.info-table td {
+    color: #111827;
+    background: white;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+}
+
+/* 삭제 링크 */
+
+.info-table a {
+    color: #dc2626;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.info-table a:hover {
+    text-decoration: underline;
+}

@@ -734,7 +734,9 @@ def download_proposal(filename):
 
     url = supabase.storage.from_("proposals").get_public_url(filename)
 
-    return url
+    print("URL =", url)
+
+    return redirect(url, code=302)
 
 # =========================
 # 보고서 다운로드

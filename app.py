@@ -14,12 +14,23 @@ import os
 import re
 
 from werkzeug.utils import secure_filename
+from storage3.types import FileOptions
+from supabase import create_client
+from datetime import datetime
 
 # =========================
 # Flask 설정
 # =========================
 
 app = Flask(__name__)
+
+SUPABASE_URL = "https://niqdsytcklxxuspmsimk.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5pcWRzeXRja2x4eHVzcG1zaW1rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNTUzNTIsImV4cCI6MjA5NTkzMTM1Mn0.i5sU1lfhg08M6xRxT3B_5m93G3vWs885pJDD1NPBAZ4"
+
+supabase = create_client(
+    SUPABASE_URL,
+    SUPABASE_KEY
+)
 
 app.secret_key = "supernova_secret_key"
 
@@ -409,24 +420,36 @@ def report():
 
 @app.route("/upload_proposal", methods=["GET", "POST"])
 def upload_proposal():
-
     if request.method == "POST":
 
-        title = request.form["title"]
-        author = request.form["author"]
+        print("FORM:", request.form)
+        print("FILES:", request.files)
+
+        title = request.form.get("title")
+        author = request.form.get("members")
+
+        if "file" not in request.files:
+            return "파일이 전달되지 않음"
 
         file = request.files["file"]
 
-        filename = secure_filename(file.filename)
+        upload_date = datetime.now().strftime("%Y-%m-%d")
 
-        filepath = os.path.join(
-
-            "uploads/proposals",
-            filename
-
+        filename = (
+                datetime.now().strftime("%Y%m%d_%H%M%S")
+                + "_"
+                + secure_filename(file.filename)
         )
 
-        file.save(filepath)
+        file_data = file.read()
+
+        supabase.storage.from_("proposals").upload(
+            path=filename,
+            file=file_data,
+            file_options=FileOptions(
+                content_type=file.content_type
+            )
+        )
 
         conn = get_db()
         c = conn.cursor()
@@ -434,15 +457,16 @@ def upload_proposal():
         c.execute("""
 
             INSERT INTO proposals
-            (title, author, filename)
+            (title, author, filename, upload_date)
 
-            VALUES (?, ?, ?)
+            VALUES (?, ?, ?, ?)
 
         """, (
 
             title,
             author,
-            filename
+            filename,
+            upload_date
 
         ))
 
@@ -454,6 +478,43 @@ def upload_proposal():
     return render_template("upload_proposal.html")
 
 # =========================
+# 계획서 삭제
+# =========================
+
+@app.route("/delete_proposal/<int:proposal_id>")
+def delete_proposal(proposal_id):
+
+    if session.get("role") != "admin":
+        return redirect("/")
+
+    conn = get_db()
+    c = conn.cursor()
+
+    c.execute("""
+        SELECT * FROM proposals
+        WHERE id=?
+    """, (proposal_id,))
+
+    proposal = c.fetchone()
+
+    if proposal:
+
+        supabase.storage.from_("proposals").remove(
+            [proposal["filename"]]
+        )
+
+        c.execute("""
+            DELETE FROM proposals
+            WHERE id=?
+        """, (proposal_id,))
+
+        conn.commit()
+
+    conn.close()
+
+    return redirect("/admin")
+
+# =========================
 # 보고서 업로드
 # =========================
 
@@ -462,21 +523,28 @@ def upload_report():
 
     if request.method == "POST":
 
-        title = request.form["title"]
-        author = request.form["author"]
+        title = request.form.get("title")
+        author = request.form.get("members")
+
+        upload_date = datetime.now().strftime("%Y-%m-%d")
 
         file = request.files["file"]
 
-        filename = secure_filename(file.filename)
-
-        filepath = os.path.join(
-
-            "uploads/reports",
-            filename
-
+        filename = (
+                datetime.now().strftime("%Y%m%d_%H%M%S")
+                + "_"
+                + secure_filename(file.filename)
         )
 
-        file.save(filepath)
+        file_data = file.read()
+
+        supabase.storage.from_("reports").upload(
+            path=filename,
+            file=file_data,
+            file_options=FileOptions(
+                content_type=file.content_type
+            )
+        )
 
         conn = get_db()
         c = conn.cursor()
@@ -484,15 +552,16 @@ def upload_report():
         c.execute("""
 
             INSERT INTO reports
-            (title, author, filename)
+            (title, author, filename, upload_date)
 
-            VALUES (?, ?, ?)
+            VALUES (?, ?, ?, ?)
 
         """, (
 
             title,
             author,
-            filename
+            filename,
+            upload_date
 
         ))
 
@@ -502,6 +571,43 @@ def upload_report():
         return redirect("/report")
 
     return render_template("upload_report.html")
+
+# =========================
+# 보고서 삭제
+# =========================
+
+@app.route("/delete_report/<int:report_id>")
+def delete_report(report_id):
+
+    if session.get("role") != "admin":
+        return redirect("/")
+
+    conn = get_db()
+    c = conn.cursor()
+
+    c.execute("""
+        SELECT * FROM reports
+        WHERE id=?
+    """, (report_id,))
+
+    report = c.fetchone()
+
+    if report:
+
+        supabase.storage.from_("reports").remove(
+            [report["filename"]]
+        )
+
+        c.execute("""
+            DELETE FROM reports
+            WHERE id=?
+        """, (report_id,))
+
+        conn.commit()
+
+    conn.close()
+
+    return redirect("/admin")
 
 # =========================
 # 교내 대회 생성
@@ -624,13 +730,11 @@ def create_scholarship():
 @app.route("/download/proposal/<filename>")
 def download_proposal(filename):
 
-    return send_from_directory(
-
-        "uploads/proposals",
-        filename,
-        as_attachment=True
-
+    url = supabase.storage.from_("proposals").get_public_url(
+        filename
     )
+
+    return redirect(url)
 
 # =========================
 # 보고서 다운로드
@@ -639,13 +743,11 @@ def download_proposal(filename):
 @app.route("/download/report/<filename>")
 def download_report(filename):
 
-    return send_from_directory(
-
-        "uploads/reports",
-        filename,
-        as_attachment=True
-
+    url = supabase.storage.from_("reports").get_public_url(
+        filename
     )
+
+    return redirect(url)
 # =========================
 # 교내대회 삭제
 # =========================
@@ -721,4 +823,8 @@ def delete_scholarship(scholarship_id):
 # =========================
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=True
+    )

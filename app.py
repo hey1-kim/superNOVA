@@ -481,7 +481,7 @@ def upload_proposal():
 # 계획서 삭제
 # =========================
 
-@app.route("/delete_proposal/<int:proposal_id>")
+@app.route("/delete_proposal/<int:proposal.id>")
 def delete_proposal(proposal_id):
 
     if session.get("role") != "admin":
@@ -576,7 +576,7 @@ def upload_report():
 # 보고서 삭제
 # =========================
 
-@app.route("/delete_report/<int:report_id>")
+@app.route("/delete_report/<int:report.id>")
 def delete_report(report_id):
 
     if session.get("role") != "admin":

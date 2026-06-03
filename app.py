@@ -483,7 +483,7 @@ def upload_proposal():
 # 계획서 삭제
 # =========================
 
-@app.route("/delete_proposal/<int:proposal.id>")
+@app.route("/delete_proposal/<int:proposal_id>")
 def delete_proposal(proposal_id):
 
     if session.get("role") != "admin":
@@ -578,7 +578,7 @@ def upload_report():
 # 보고서 삭제
 # =========================
 
-@app.route("/delete_report/<int:report.id>")
+@app.route("/delete_report/<int:report_id>")
 def delete_report(report_id):
 
     if session.get("role") != "admin":
@@ -734,9 +734,10 @@ def download_proposal(filename):
 
     url = supabase.storage.from_("proposals").get_public_url(filename)
 
-    print("URL =", url)
-
-    return redirect(url, code=302)
+    return f"""
+    <h1>Download Test</h1>
+    <a href="{url}" target="_blank">다운로드</a>
+    """
 
 # =========================
 # 보고서 다운로드

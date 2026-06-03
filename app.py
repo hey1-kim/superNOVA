@@ -185,6 +185,8 @@ def admin():
     """)
     proposals = c.fetchall()
 
+    print(proposals)
+
     c.execute("""
         SELECT * FROM reports
         ORDER BY id DESC
@@ -730,11 +732,9 @@ def create_scholarship():
 @app.route("/download/proposal/<filename>")
 def download_proposal(filename):
 
-    url = supabase.storage.from_("proposals").get_public_url(
-        filename
-    )
+    url = supabase.storage.from_("proposals").get_public_url(filename)
 
-    return redirect(url)
+    return url
 
 # =========================
 # 보고서 다운로드

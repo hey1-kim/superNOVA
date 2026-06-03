@@ -24,8 +24,8 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-SUPABASE_URL = "https://niqdsytcklxxuspmsimk.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5pcWRzeXRja2x4eHVzcG1zaW1rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNTUzNTIsImV4cCI6MjA5NTkzMTM1Mn0.i5sU1lfhg08M6xRxT3B_5m93G3vWs885pJDD1NPBAZ4"
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 
 supabase = create_client(
     SUPABASE_URL,
